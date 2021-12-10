@@ -1,20 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
     private float nextStateTimer;
-    private int state;
     private string stateText;
     Animator anim;
+    private Rigidbody rb;
+    public float movementSpeed = 1.5f;
+    States mystate;
+
+    enum States
+    {
+        Idle,
+        Turn,
+        Walk
+    }
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+<<<<<<< Updated upstream:Assets/Scripts/Enemy.cs
         state = 0;
+=======
+<<<<<<< HEAD:Assets/Player.cs
+        mystate = States.Idle;
+=======
+        state = 0;
+>>>>>>> 71769a96a19d685d025f495498b0e54c369d6679:Assets/Scripts/Enemy.cs
+>>>>>>> Stashed changes:Assets/Player.cs
         nextStateTimer = 2;
 
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -31,34 +54,34 @@ public class Enemy : MonoBehaviour
     {
         nextStateTimer -= Time.deltaTime;
 
-        if( state == 0 )
+        if (mystate == States.Idle)
         {
             Idle();
 
             if( nextStateTimer < 0 )
             {
-                state = 1;
-                nextStateTimer = 2;
+                mystate = States.Turn;
+                nextStateTimer = 1;
             }
         }
 
-        if( state == 1 )
+        if (mystate == States.Turn)
         {
 
             Turn();
             if( nextStateTimer < 0 )
             {
-                state = 2;
-                nextStateTimer = 10;
+                mystate = States.Walk;
+                nextStateTimer = 5;
             }
 
         }
 
-        if( state == 2 )
+        if (mystate == States.Walk)
         {
             if( nextStateTimer < 0 )
             {
-                state = 0;
+                mystate = States.Idle;
                 nextStateTimer = 5;
             }
 
@@ -78,18 +101,36 @@ public class Enemy : MonoBehaviour
 
     void Turn()
     {
+        float randomTurn = Random.Range(0, 5);
+
+
         print("Turn");
         stateText = "Turn";
+        transform.Rotate(0, randomTurn, 0, Space.World);
     }
 
     void Walk()
     {
+        transform.position += transform.forward * Time.deltaTime * movementSpeed;
+
+
+
+
         anim.SetBool("walk", true);
         print("Walk");
         stateText = "Walk";
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
 
+        if (other.gameObject.tag == "Border")
+        {
+            SceneManager.LoadScene("Demo");
+        }
+
+
+    }
 
 
 
