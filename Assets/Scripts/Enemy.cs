@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     private float nextStateTimer;
     private int state;
@@ -11,14 +11,14 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int state = 0;
+        state = 0;
         nextStateTimer = 2;
 
         anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         ProcessStates();
 
